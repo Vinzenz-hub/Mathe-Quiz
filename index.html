@@ -119,12 +119,15 @@ function playTone(correct){
 }
 function verify(){
  if(solved)return;
- const entered=document.getElementById('numberAnswer').value;\n if(mode==='read'&&(entered===''||Number(entered)<1||Number(entered)>999)){message.textContent='Bitte eine Zahl eingeben';return}\n const correct=(mode==='read'?Number(entered):currentValue())===target;result.className='result show '+(correct?'good':'bad');result.textContent=correct?'✓':'✕';
+ const entered=document.getElementById('numberAnswer').value;
+ if(mode==='read'&&(entered===''||Number(entered)<1||Number(entered)>999)){message.textContent='Bitte eine Zahl eingeben';return}
+ const correct=(mode==='read'?Number(entered):currentValue())===target;result.className='result show '+(correct?'good':'bad');result.textContent=correct?'✓':'✕';
  if(correct){solved=true;message.textContent='Aufgabe gelöst';checkButton.disabled=true;nextButton.disabled=false;playTone(true);}
  else{message.textContent='Noch nicht richtig';if(navigator.vibrate)navigator.vibrate([120,60,120]);main.classList.remove('wrong');void main.offsetWidth;main.classList.add('wrong');playTone(false);}
 }
 checkButton.addEventListener('click',verify);
-nextButton.addEventListener('click',()=>{if(solved)newNumber()});\ndocument.getElementById('numberAnswer').addEventListener('input',()=>{if(!solved){result.className='result';result.textContent='';message.textContent=''}});
+nextButton.addEventListener('click',()=>{if(solved)newNumber()});
+document.getElementById('numberAnswer').addEventListener('input',()=>{if(!solved){result.className='result';result.textContent='';message.textContent=''}});
 function point(e){return {x:e.clientX,y:e.clientY}}
 function start(e,kind,from){
  if(mode!=='build'||solved)return;
