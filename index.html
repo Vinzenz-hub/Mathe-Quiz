@@ -19,14 +19,14 @@ main{width:min(920px,100%);padding:clamp(22px,5vw,56px) clamp(16px,4vw,36px) 36p
 .zone-head b{font-size:16px;color:var(--ink);margin-right:5px}
 .pieces{width:100%;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));grid-auto-rows:min-content;align-content:start;justify-items:center;gap:5px 2px;padding:14px 0;flex:1}
 .piece{display:block;flex:none;touch-action:none;user-select:none;-webkit-user-select:none}
-.h{width:clamp(12px,3vw,25px);height:clamp(23px,5vw,34px);border-radius:3px;background:var(--yellow)}
-.z{width:clamp(10px,2.4vw,18px);height:clamp(23px,5vw,34px);border-radius:3px;background:#70c89f}
-.e{width:clamp(8px,2vw,15px);height:clamp(23px,5vw,34px);border-radius:3px;background:var(--unit)}
+.h{width:clamp(25px,3.2vw,34px);height:clamp(25px,3.2vw,34px);border:1px solid #d99b35;border-radius:2px;background-color:var(--yellow);background-image:linear-gradient(#b77d2b66 1px,transparent 1px),linear-gradient(90deg,#b77d2b66 1px,transparent 1px);background-size:10% 10%}
+.z{width:clamp(11px,1.7vw,16px);height:clamp(25px,3.2vw,34px);border:1px solid #39956d;border-radius:2px;background:repeating-linear-gradient(0deg,#70c89f 0 8%,#39956d 8% 10%)}
+.e{width:clamp(12px,1.8vw,16px);height:clamp(12px,1.8vw,16px);border:1px solid #4d83d5;border-radius:2px;background:var(--unit);align-self:center}
 .count{font-size:12px;color:var(--muted);font-weight:650;min-height:17px}
 .tray{margin-top:clamp(24px,5vh,44px);padding:16px 18px 19px;border-radius:20px;background:#eceff3;display:flex;justify-content:center;align-items:center;gap:clamp(18px,6vw,54px);touch-action:none}
 .source{display:flex;align-items:center;justify-content:center;gap:10px;min-width:70px;min-height:66px;padding:9px 13px;border-radius:14px;background:#fff;box-shadow:0 2px 8px #17233b0b;cursor:grab;touch-action:none;user-select:none}
 .source:active{cursor:grabbing}
-.source .h{width:22px;height:32px}.source .z{height:32px;width:15px}.source .e{width:11px;height:32px}
+.source .h{width:32px;height:32px}.source .z{height:32px;width:14px}.source .e{width:14px;height:14px}
 .source span:last-child{font-size:14px;font-weight:800}
 .drag-ghost{position:fixed;z-index:20;pointer-events:none;opacity:.88;transform:translate(-50%,-50%) scale(1.12);filter:drop-shadow(0 5px 7px #0002)}
 .number-entry{display:none;justify-content:center;margin-top:clamp(24px,5vh,44px)}
@@ -44,8 +44,8 @@ main{width:min(920px,100%);padding:clamp(22px,5vw,56px) clamp(16px,4vw,36px) 36p
 main.wrong{animation:shake .34s ease}
 @keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-9px)}40%,80%{transform:translateX(9px)}}
 @media(max-width:520px){.actions{gap:8px}.action{flex:1;padding:0 10px;min-height:52px;font-size:14px}}
-@media(max-width:520px){main{padding-top:24px}.target{margin:7vh 0 7vh}.workspace{gap:7px}.zone{min-height:180px;padding:10px 5px;border-radius:15px}.zone-head{font-size:11px}.zone-head b{display:block;font-size:14px;margin:0 0 3px}.pieces{gap:4px 2px;padding:12px 0}.h{width:clamp(11px,3vw,17px);height:25px}.z{width:clamp(9px,2.5vw,14px);height:25px}.e{width:clamp(7px,2vw,11px);height:25px}.tray{gap:9px;padding:12px 8px;border-radius:16px}.source{min-width:0;flex:1;gap:7px;padding:9px 5px;min-height:60px}.source .h{width:19px;height:29px}.source .z{height:29px;width:13px}.source .e{width:10px;height:29px}.source span:last-child{font-size:12px}}
-@media(max-width:360px){.workspace{gap:5px}.zone{padding-inline:3px}.pieces{gap:3px 1px}.h{width:10px;height:22px}.z{width:8px;height:22px}.e{width:6px;height:22px}.tray{gap:6px}.source{gap:5px}}
+@media(max-width:520px){main{padding-top:24px}.target{margin:7vh 0 7vh}.workspace{gap:7px}.zone{min-height:180px;padding:10px 5px;border-radius:15px}.zone-head{font-size:11px}.zone-head b{display:block;font-size:14px;margin:0 0 3px}.pieces{gap:4px 0;padding:12px 0}.h{width:26px;height:26px}.z{width:12px;height:26px}.e{width:12px;height:12px}.tray{gap:9px;padding:12px 8px;border-radius:16px}.source{min-width:0;flex:1;gap:7px;padding:9px 5px;min-height:60px}.source .h{width:29px;height:29px}.source .z{height:29px;width:13px}.source .e{width:13px;height:13px}.source span:last-child{font-size:12px}}
+@media(max-width:360px){.workspace{gap:5px}.zone{padding-inline:3px}.pieces{gap:3px 0}.h{width:23px;height:23px}.z{width:11px;height:23px}.e{width:11px;height:11px}.tray{gap:6px}.source{gap:5px}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
