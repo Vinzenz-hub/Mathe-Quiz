@@ -2,130 +2,123 @@
 <html lang="de">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Zahlen bauen – Mathe-Quiz bis 1000</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f7f8fa">
+<title>Zahlen legen</title>
 <style>
-:root{--ink:#17233b;--muted:#68758d;--paper:#f5f7fc;--card:#fff;--blue:#3659d9;--blue2:#e9edff;--green:#16865b;--red:#c34242;--line:#e4e9f2;--shadow:0 12px 35px #26365b12}
-*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}
-button,input{font:inherit}button{cursor:pointer;border:0;border-radius:12px;padding:11px 17px;font-weight:700;background:var(--blue);color:white;transition:.15s}button:hover{filter:brightness(1.07);transform:translateY(-1px)}button:disabled{opacity:.45;cursor:not-allowed;transform:none}.secondary{background:var(--blue2);color:var(--blue)}.ghost{background:transparent;color:var(--muted);border:1px solid var(--line)}
-header{padding:23px max(20px,calc((100% - 1060px)/2));display:flex;align-items:center;justify-content:space-between;gap:15px}.brand{font-weight:850;letter-spacing:-.04em;font-size:21px}.brand span{color:var(--blue)}
-main{max-width:1060px;margin:10px auto 60px;padding:0 20px}.intro{display:flex;justify-content:space-between;align-items:end;gap:20px;margin:12px 0 24px}.eyebrow{color:var(--blue);font-size:12px;font-weight:850;text-transform:uppercase;letter-spacing:.12em}.intro h1{font-size:clamp(27px,4vw,42px);letter-spacing:-.045em;line-height:1.08;margin:7px 0}.intro p{color:var(--muted);margin:8px 0 0}.stats{display:flex;gap:9px;flex-wrap:wrap}.pill{background:white;border:1px solid var(--line);border-radius:999px;padding:8px 13px;font-size:13px;font-weight:750;white-space:nowrap}
-.progress{height:8px;background:#e5eaf4;border-radius:99px;overflow:hidden;margin-bottom:18px}.progress>div{height:100%;width:0;background:var(--blue);transition:width .25s}
-.panel{background:var(--card);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);padding:clamp(18px,3vw,30px)}.taskhead{display:flex;justify-content:space-between;gap:15px;align-items:center}.tag{background:#eef1ff;color:var(--blue);padding:6px 10px;border-radius:8px;font-size:12px;font-weight:850}.taskhead small{color:var(--muted);font-weight:700}.prompt{text-align:center;padding:22px 0 14px}.prompt h2{font-size:clamp(20px,3vw,27px);margin:0 0 8px}.target{font-size:clamp(55px,10vw,82px);font-weight:900;letter-spacing:-.07em;color:var(--blue);line-height:1.1;font-variant-numeric:tabular-nums}.sub{color:var(--muted);margin-top:6px}
-.palette{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:13px 15px;background:#f7f8fc;border:1px dashed #cbd4e5;border-radius:15px;margin:16px 0 10px}.palette strong{font-size:13px;margin-right:3px}.palette-piece{display:flex;align-items:center;gap:7px;padding:8px 11px;border:1px solid var(--line);border-radius:11px;background:white;color:var(--ink);font-size:13px;font-weight:800;cursor:grab;user-select:none;touch-action:manipulation}.palette-piece:active{cursor:grabbing}.palette-piece .block{pointer-events:none}.blocks.drop-ready{outline:2px dashed var(--blue);outline-offset:3px;background:#f2f5ff;border-radius:9px}.blocks{transition:background .12s,outline .12s}.workspace{display:grid;grid-template-columns:1fr 1fr 1fr;gap:13px;margin:20px 0}.place{border:1px solid var(--line);border-radius:16px;padding:14px;min-width:0}.place h3{font-size:14px;margin:0 0 3px}.place .desc{font-size:12px;color:var(--muted)}.blocks{min-height:104px;display:flex;align-content:flex-start;align-items:flex-start;gap:5px;flex-wrap:wrap;padding:13px 0 5px}.block{position:relative;display:inline-grid;place-items:center;border-radius:5px;font-size:11px;font-weight:850;color:#17233b;user-select:none}.hundred{width:51px;height:51px;background-color:#f6bd59;background-image:linear-gradient(#d9982f55 1px,transparent 1px),linear-gradient(90deg,#d9982f55 1px,transparent 1px);background-size:10px 10px;border:1px solid #dc9e39}.ten{width:18px;height:54px;background:repeating-linear-gradient(0deg,#71c8a3 0 8px,#319d74 8px 10px);border:1px solid #23855f}.one{width:17px;height:17px;background:#75a8f6;border:1px solid #477fd7}.count{font-size:12px;color:var(--muted);font-weight:750;margin-top:4px}.controls{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}.controls button{padding:7px 11px;font-size:13px}.controls .minus{background:#f0f2f7;color:#34415a}.place .readout{font-weight:850;font-size:20px;margin-top:10px}.place .readout span{font-size:12px;color:var(--muted);font-weight:600}
-.answerrow{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin:18px 0 5px}.answerrow input{width:190px;max-width:55vw;text-align:center;font-size:26px;font-weight:850;border:2px solid var(--line);border-radius:12px;padding:10px;color:var(--ink);outline:none}.answerrow input:focus{border-color:var(--blue)}.feedback{min-height:28px;text-align:center;font-weight:750;margin:12px 0 0}.feedback.good{color:var(--green)}.feedback.bad{color:var(--red)}.actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:13px}.hidden{display:none!important}.footerhint{text-align:center;color:var(--muted);font-size:12px;margin-top:17px}
-.summary{text-align:center;padding:30px 10px}.summary .big{font-size:64px;font-weight:900;color:var(--blue);letter-spacing:-.06em}.summary h2{font-size:30px;margin:0}.summary p{color:var(--muted)}.review{max-width:450px;margin:20px auto;text-align:left;background:#f7f8fc;padding:14px 18px;border-radius:14px}
-@media(max-width:650px){header{padding-top:15px;padding-bottom:12px}.intro{display:block}.stats{margin-top:15px}.workspace{gap:7px}.place{padding:10px 8px}.place h3{font-size:12px}.place .desc{font-size:10px}.blocks{min-height:94px;gap:4px}.hundred{width:39px;height:39px;background-size:8px 8px}.ten{height:45px;width:14px}.one{width:14px;height:14px}.controls{gap:4px}.controls button{padding:6px 8px;font-size:11px}.target{font-size:60px}}
+:root{--bg:#f7f8fa;--ink:#17191f;--muted:#858b98;--line:#e5e7eb;--blue:#315eea;--yellow:#f4bd59;--green:#55b98b;--unit:#76a7f5}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:ui-rounded,system-ui,-apple-system,"Segoe UI",sans-serif}
+body{min-height:100svh;display:flex;justify-content:center}
+main{width:min(920px,100%);padding:clamp(22px,5vw,56px) clamp(16px,4vw,36px) 36px;display:flex;flex-direction:column}
+.target{font-size:clamp(88px,22vw,170px);font-weight:850;line-height:1;letter-spacing:-.075em;text-align:center;font-variant-numeric:tabular-nums;margin:4vh 0 5vh;color:#151923}
+.workspace{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.zone{min-height:clamp(150px,26vh,230px);background:#fff;border:2px dashed var(--line);border-radius:20px;padding:14px;display:flex;flex-direction:column;align-items:center;transition:border-color .12s,background .12s}
+.zone.over{border-color:var(--blue);background:#f0f4ff}
+.zone-head{font-size:13px;font-weight:750;color:var(--muted);letter-spacing:.02em}
+.zone-head b{font-size:16px;color:var(--ink);margin-right:5px}
+.pieces{width:100%;display:flex;align-content:flex-start;align-items:flex-start;justify-content:center;gap:5px;flex-wrap:wrap;padding:14px 0;flex:1}
+.piece{display:block;flex:none;touch-action:none;user-select:none;-webkit-user-select:none}
+.h{width:clamp(29px,5vw,43px);height:clamp(29px,5vw,43px);border-radius:4px;border:1px solid #d99b35;background-color:var(--yellow);background-image:linear-gradient(#d99b3555 1px,transparent 1px),linear-gradient(90deg,#d99b3555 1px,transparent 1px);background-size:9px 9px}
+.z{width:16px;height:clamp(38px,7vw,54px);border-radius:3px;border:1px solid #39956d;background:repeating-linear-gradient(0deg,#70c89f 0 8px,#39956d 8px 10px)}
+.e{width:19px;height:19px;border-radius:3px;border:1px solid #4d83d5;background:var(--unit)}
+.count{font-size:12px;color:var(--muted);font-weight:650;min-height:17px}
+.tray{margin-top:clamp(24px,5vh,44px);padding:16px 18px 19px;border-radius:20px;background:#eceff3;display:flex;justify-content:center;align-items:center;gap:clamp(18px,6vw,54px);touch-action:none}
+.source{display:flex;align-items:center;justify-content:center;gap:10px;min-width:70px;min-height:66px;padding:9px 13px;border-radius:14px;background:#fff;box-shadow:0 2px 8px #17233b0b;cursor:grab;touch-action:none;user-select:none}
+.source:active{cursor:grabbing}
+.source .h{width:35px;height:35px}.source .z{height:43px;width:15px}.source .e{width:19px;height:19px}
+.source span:last-child{font-size:14px;font-weight:800}
+.drag-ghost{position:fixed;z-index:20;pointer-events:none;opacity:.88;transform:translate(-50%,-50%) scale(1.12);filter:drop-shadow(0 5px 7px #0002)}
+.message{height:28px;margin-top:14px;text-align:center;font-size:14px;font-weight:700;color:#27845c}
+@media(max-width:520px){main{padding-top:24px}.target{margin:7vh 0 7vh}.workspace{gap:7px}.zone{min-height:180px;padding:10px 5px;border-radius:15px}.zone-head{font-size:11px}.zone-head b{display:block;font-size:14px;margin:0 0 3px}.pieces{gap:4px;padding:12px 0}.h{width:27px;height:27px;background-size:7px 7px}.z{width:13px;height:39px}.e{width:15px;height:15px}.tray{gap:9px;padding:12px 8px;border-radius:16px}.source{min-width:0;flex:1;gap:7px;padding:9px 5px;min-height:60px}.source .h{width:29px;height:29px}.source .z{height:37px;width:13px}.source .e{width:16px;height:16px}.source span:last-child{font-size:12px}}
+@media(max-width:360px){.workspace{gap:5px}.zone{padding-inline:3px}.h{width:23px;height:23px}.z{width:11px;height:35px}.e{width:13px;height:13px}.tray{gap:6px}.source{gap:5px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
-<header><div class="brand">✳ Zahlen<span>bauen</span></div><button class="ghost" id="restartTop">Neu starten ↻</button></header>
 <main>
- <section class="intro"><div><div class="eyebrow">Mathe-Quiz · Zahlenraum bis 1000</div><h1>Zahlen verstehen.<br>Mit Material entdecken.</h1><p>Baue Zahlen mit Hundertern, Zehnern und Einern – oder lies die Zahl aus dem Material ab.</p></div><div class="stats"><div class="pill" id="roundPill">Aufgabe 1 / 10</div><div class="pill" id="scorePill">⭐ 0 Punkte</div></div></section>
- <div class="progress"><div id="progressBar"></div></div>
- <section class="panel" id="quiz">
-  <div class="taskhead"><span class="tag" id="modeTag">ZAHL BAUEN</span><small id="taskCount">Runde 1 von 10</small></div>
-  <div class="prompt" id="buildPrompt"><h2>Lege diese Zahl mit dem Stellenwertmaterial:</h2><div class="target" id="target">347</div><div class="sub">Nutze die Plus- und Minus-Schaltflächen bei H, Z und E.</div></div>
-  <div class="prompt hidden" id="readPrompt"><h2>Welche Zahl ist mit dem Material dargestellt?</h2><div class="sub">Zähle Hunderter, Zehner und Einer und trage die Zahl ein.</div></div>
-  <div class="palette" id="palette"><strong>Material zum Ziehen:</strong><div class="palette-piece" draggable="true" data-piece="h"><span class="block hundred"></span> Hunderter</div><div class="palette-piece" draggable="true" data-piece="z"><span class="block ten"></span> Zehner</div><div class="palette-piece" draggable="true" data-piece="e"><span class="block one"></span> Einer</div><span class="sub">Ziehe einen Baustein in das passende Feld – oder tippe ihn an.</span></div>
-  <div class="workspace" id="workspace">
-   <div class="place"><h3>🟨 Hunderter (H)</h3><div class="desc">Ein Hunderterfeld = 100</div><div class="blocks" id="hBlocks"></div><div class="count" id="hCount">0 Hunderter</div><div class="controls"><button class="minus" data-part="h" data-delta="-1">−</button><button data-part="h" data-delta="1">+ 100</button></div></div>
-   <div class="place"><h3>🟩 Zehner (Z)</h3><div class="desc">Ein Zehnerstab = 10</div><div class="blocks" id="zBlocks"></div><div class="count" id="zCount">0 Zehner</div><div class="controls"><button class="minus" data-part="z" data-delta="-1">−</button><button data-part="z" data-delta="1">+ 10</button></div></div>
-   <div class="place"><h3>🟦 Einer (E)</h3><div class="desc">Ein Würfel = 1</div><div class="blocks" id="eBlocks"></div><div class="count" id="eCount">0 Einer</div><div class="controls"><button class="minus" data-part="e" data-delta="-1">−</button><button data-part="e" data-delta="1">+ 1</button></div></div>
-  </div>
-  <div class="answerrow hidden" id="answerRow"><label for="answerInput"><strong>Die Zahl lautet:</strong></label><input id="answerInput" type="number" min="0" max="999" inputmode="numeric" placeholder="0–999"><button id="checkInput">Prüfen</button></div>
-  <div class="feedback" id="feedback" aria-live="polite"></div>
-  <div class="actions"><button id="checkBuild">Zahl prüfen</button><button id="next" class="hidden">Nächste Aufgabe →</button><button id="hint" class="secondary">Tipp anzeigen</button></div>
-  <div class="footerhint" id="hintText">Tipp: Achte darauf, wie viele Hunderter, Zehner und Einer die Zahl hat.</div>
- </section>
- <section class="panel summary hidden" id="summary"><div class="eyebrow">Geschafft!</div><div class="big" id="finalScore">0 / 10</div><h2 id="finalTitle">Gut gemacht!</h2><p id="finalText"></p><div class="review" id="review"></div><button id="playAgain">Noch einmal spielen ↻</button></section>
+  <div class="target" id="target" aria-label="Zielzahl">347</div>
+  <section class="workspace" aria-label="Arbeitsfläche">
+    <div class="zone" data-drop="h"><div class="zone-head"><b>H</b>Hunderter</div><div class="pieces" id="pieces-h"></div><div class="count" id="count-h">0</div></div>
+    <div class="zone" data-drop="z"><div class="zone-head"><b>Z</b>Zehner</div><div class="pieces" id="pieces-z"></div><div class="count" id="count-z">0</div></div>
+    <div class="zone" data-drop="e"><div class="zone-head"><b>E</b>Einer</div><div class="pieces" id="pieces-e"></div><div class="count" id="count-e">0</div></div>
+  </section>
+  <section class="tray" id="tray" data-drop="tray" aria-label="Material">
+    <div class="source" data-source="h"><i class="piece h"></i><span>100</span></div>
+    <div class="source" data-source="z"><i class="piece z"></i><span>10</span></div>
+    <div class="source" data-source="e"><i class="piece e"></i><span>1</span></div>
+  </section>
+  <div class="message" id="message" aria-live="polite"></div>
 </main>
 <script>
 (()=>{
-const total=10;let round=0,score=0,target=0,parts={h:0,z:0,e:0},mode='build',locked=false,history=[];
-const $=id=>document.getElementById(id);
-const rand=(min,max)=>Math.floor(Math.random()*(max-min+1))+min;
-function split(n){return {h:Math.floor(n/100),z:Math.floor(n%100/10),e:n%10}}
-function newTask(){
- if(round>=total){finish();return}
- round++;locked=false;parts={h:0,z:0,e:0};
- mode=(round%3===0||round===7||round===10)?'read':'build';
- target=rand(1,999);
- if(mode==='read')parts=split(target);
- $('modeTag').textContent=mode==='build'?'ZAHL BAUEN':'ZAHL ABLESEN';
- $('buildPrompt').classList.toggle('hidden',mode!=='build');
- $('readPrompt').classList.toggle('hidden',mode!=='read');
- $('target').textContent=target;
- $('workspace').classList.remove('hidden');$('palette').classList.toggle('hidden',mode!=='build');
- $('answerRow').classList.toggle('hidden',mode!=='read');
- $('checkBuild').classList.toggle('hidden',mode!=='build');
- $('next').classList.add('hidden');$('feedback').textContent='';$('feedback').className='feedback';
- $('hintText').textContent='Tipp: Achte darauf, wie viele Hunderter, Zehner und Einer die Zahl hat.';
- $('hint').classList.remove('hidden');$('answerInput').value='';$('answerInput').disabled=false;
- $('roundPill').textContent=`Aufgabe ${round} / ${total}`;$('taskCount').textContent=`Runde ${round} von ${total}`;
- $('scorePill').textContent=`⭐ ${score} Punkte`;$('progressBar').style.width=`${(round-1)/total*100}%`;
- render();
+const targetEl=document.getElementById('target'),message=document.getElementById('message');
+const counts={h:0,z:0,e:0};let target=347,drag=null,ghost=null,nextTimer=null;
+const values={h:100,z:10,e:1},labels={h:'Hunderter',z:'Zehner',e:'Einer'};
+function newNumber(){
+ clearTimeout(nextTimer);
+ let n;do{n=Math.floor(Math.random()*999)+1}while(n===target);
+ target=n;targetEl.textContent=String(n);message.textContent='';
+ for(const k of Object.keys(counts)){counts[k]=0;render(k)}
 }
-function render(){
- for(const [key,label,word] of [['h','hBlocks','Hunderter'],['z','zBlocks','Zehner'],['e','eBlocks','Einer']]){
-  const el=$(label);el.innerHTML='';
-  for(let i=0;i<parts[key];i++){const b=document.createElement('span');b.className=`block ${key==='h'?'hundred':key==='z'?'ten':'one'}`;b.setAttribute('aria-label',word);el.appendChild(b)}
-  $(`${key}Count`).textContent=`${parts[key]} ${word}`;
+function render(k){
+ const area=document.getElementById('pieces-'+k);area.replaceChildren();
+ for(let i=0;i<counts[k];i++){
+  const block=document.createElement('i');block.className='piece '+k;block.dataset.placed=k;block.dataset.index=String(i);block.setAttribute('aria-label',labels[k]);
+  area.append(block);
+ }
+ document.getElementById('count-'+k).textContent=String(counts[k]);
+}
+function currentValue(){return counts.h*100+counts.z*10+counts.e}
+function update(){
+ const v=currentValue();
+ if(v===target){
+  message.textContent='✓';nextTimer=setTimeout(newNumber,1100);
+ }else if(v>target){message.textContent='';}
+ else{message.textContent='';}
+}
+function point(e){return {x:e.clientX,y:e.clientY}}
+function start(e,kind,from){
+ if(e.button!==undefined&&e.button!==0)return;
+ e.preventDefault();
+ const p=point(e);drag={kind,from,startX:p.x,startY:p.y,moved:false};
+ const g=document.createElement('i');g.className='piece '+kind+' drag-ghost';g.style.left=p.x+'px';g.style.top=p.y+'px';document.body.append(g);ghost=g;
+ document.addEventListener('pointermove',move,{passive:false});
+ document.addEventListener('pointerup',end,{once:true});
+ document.addEventListener('pointercancel',cancel,{once:true});
+}
+function move(e){
+ if(!drag)return;e.preventDefault();const p=point(e);
+ if(Math.hypot(p.x-drag.startX,p.y-drag.startY)>5)drag.moved=true;
+ if(ghost){ghost.style.left=p.x+'px';ghost.style.top=p.y+'px'}
+ document.querySelectorAll('.zone').forEach(z=>z.classList.remove('over'));
+ const el=document.elementFromPoint(p.x,p.y)?.closest('.zone');
+ if(el)el.classList.add('over');
+}
+function cleanup(){
+ document.removeEventListener('pointermove',move);
+ document.querySelectorAll('.zone').forEach(z=>z.classList.remove('over'));
+ ghost?.remove();ghost=null;drag=null;
+}
+function end(e){
+ if(!drag)return;const p=point(e),d=drag,under=document.elementFromPoint(p.x,p.y);
+ const zone=under?.closest('[data-drop]');cleanup();
+ if(!d.moved||!zone)return;
+ if(d.from==='tray'){
+  const k=zone.dataset.drop;
+  if(k!==d.kind||counts[k]>=9)return;
+  counts[k]++;render(k);update();
+ }else if(zone.dataset.drop==='tray'){
+  counts[d.kind]=Math.max(0,counts[d.kind]-1);render(d.kind);message.textContent='';clearTimeout(nextTimer);
  }
 }
-let draggedPart=null;
-document.querySelectorAll('.palette-piece').forEach(piece=>{
- piece.addEventListener('dragstart',e=>{
-  if(locked||mode!=='build'){e.preventDefault();return}
-  draggedPart=piece.dataset.piece;
-  e.dataTransfer.setData('text/plain',draggedPart);
-  e.dataTransfer.effectAllowed='copy';
- });
- piece.addEventListener('click',()=>{
-  if(locked||mode!=='build')return;
-  addPiece(piece.dataset.piece);
- });
-});
-function addPiece(k){
- if(!['h','z','e'].includes(k)||locked||mode!=='build')return;
- if(parts[k]>=9){$('feedback').textContent='In dieser Stellenwert-Spalte sind höchstens 9 Bausteine möglich.';$('feedback').className='feedback bad';return}
- parts[k]++;$('feedback').textContent='';$('feedback').className='feedback';render();
-}
-document.querySelectorAll('.blocks').forEach(zone=>{
- zone.addEventListener('dragover',e=>{
-  if(locked||mode!=='build')return;
-  e.preventDefault();zone.classList.add('drop-ready');e.dataTransfer.dropEffect='copy';
- });
- zone.addEventListener('dragleave',()=>zone.classList.remove('drop-ready'));
- zone.addEventListener('drop',e=>{
-  e.preventDefault();zone.classList.remove('drop-ready');
-  const k=e.dataTransfer.getData('text/plain')||draggedPart;
-  const expected=zone.id==='hBlocks'?'h':zone.id==='zBlocks'?'z':'e';
-  if(k!==expected){$('feedback').textContent='Dieser Baustein gehört in eine andere Spalte.';$('feedback').className='feedback bad';return}
-  addPiece(k);
- });
-});
-document.querySelectorAll('[data-part]').forEach(btn=>btn.addEventListener('click',()=>{
- if(locked||mode!=='build')return;const k=btn.dataset.part;parts[k]=Math.max(0,Math.min(9,parts[k]+Number(btn.dataset.delta)));render();
+function cancel(){cleanup()}
+document.querySelectorAll('[data-source]').forEach(el=>el.addEventListener('pointerdown',e=>start(e,el.dataset.source,'tray')));
+document.querySelectorAll('.pieces').forEach(el=>el.addEventListener('pointerdown',e=>{
+ const block=e.target.closest('[data-placed]');if(block)start(e,block.dataset.placed,'workspace');
 }));
-function check(value){
- if(locked)return;
- if(value===target){score++;$('feedback').textContent='✓ Richtig! Sehr gut gemacht.';$('feedback').className='feedback good';}
- else{$('feedback').textContent=`Noch nicht ganz. Die richtige Zahl ist ${target}.`;$('feedback').className='feedback bad';}
- history.push({round,mode,target,answer:value,ok:value===target});
- locked=true;$('scorePill').textContent=`⭐ ${score} Punkte`;$('next').classList.remove('hidden');$('checkBuild').disabled=true;$('checkInput').disabled=true;$('answerInput').disabled=true;
-}
-$('checkBuild').addEventListener('click',()=>{const value=parts.h*100+parts.z*10+parts.e;check(value)});
-$('checkInput').addEventListener('click',()=>{const v=$('answerInput').value;if(v===''||Number(v)<0||Number(v)>999){$('feedback').textContent='Bitte gib eine Zahl von 0 bis 999 ein.';$('feedback').className='feedback bad';return}check(Number(v))});
-$('answerInput').addEventListener('keydown',e=>{if(e.key==='Enter')$('checkInput').click()});
-$('next').addEventListener('click',()=>{$('checkBuild').disabled=false;$('checkInput').disabled=false;newTask()});
-$('hint').addEventListener('click',()=>{$('hintText').textContent=mode==='build'?'Zerlege die Zielzahl in Hunderter, Zehner und Einer. Beispiel: 347 = 3 H + 4 Z + 7 E. Du kannst die Bausteine oben in die passenden Felder ziehen oder antippen.':'Zähle zuerst die großen Hunderterfelder, dann die Zehnerstäbe und zuletzt die Einerwürfel.';$('hint').classList.add('hidden')});
-function finish(){
- $('quiz').classList.add('hidden');$('summary').classList.remove('hidden');$('progressBar').style.width='100%';$('finalScore').textContent=`${score} / ${total}`;$('finalTitle').textContent=score===10?'Fantastisch! 🏆':score>=7?'Richtig stark! 🎉':'Weiter üben – du schaffst das! 💪';$('finalText').textContent=`Du hast ${score} von ${total} Aufgaben richtig gelöst.`;$('review').innerHTML=`<strong>Deine Auswertung</strong><br>${history.map(x=>`Aufgabe ${x.round}: ${x.ok?'✓ richtig':`✗ richtig wäre ${x.target}`} · ${x.mode==='build'?'Zahl bauen':'Zahl ablesen'}`).join('<br>')}`;
-}
-function restart(){round=0;score=0;history=[];$('summary').classList.add('hidden');$('quiz').classList.remove('hidden');$('checkBuild').disabled=false;$('checkInput').disabled=false;newTask()}
-$('playAgain').addEventListener('click',restart);$('restartTop').addEventListener('click',restart);
-newTask();
+newNumber();
 })();
 </script>
-</body></html>
+</body>
+</html>
