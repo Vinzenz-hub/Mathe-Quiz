@@ -84,8 +84,8 @@ function start(e,kind,from){
  const p=point(e);drag={kind,from,startX:p.x,startY:p.y,moved:false};
  const g=document.createElement('i');g.className='piece '+kind+' drag-ghost';g.style.left=p.x+'px';g.style.top=p.y+'px';document.body.append(g);ghost=g;
  document.addEventListener('pointermove',move,{passive:false});
- document.addEventListener('pointerup',end,{once:true});
- document.addEventListener('pointercancel',cancel,{once:true});
+ document.addEventListener('pointerup',end);
+ document.addEventListener('pointercancel',cancel);
 }
 function move(e){
  if(!drag)return;e.preventDefault();const p=point(e);
@@ -97,6 +97,8 @@ function move(e){
 }
 function cleanup(){
  document.removeEventListener('pointermove',move);
+ document.removeEventListener('pointerup',end);
+ document.removeEventListener('pointercancel',cancel);
  document.querySelectorAll('.zone').forEach(z=>z.classList.remove('over'));
  ghost?.remove();ghost=null;drag=null;
 }
