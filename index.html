@@ -71,7 +71,6 @@ let solved=false,audioContext=null;
 const counts={h:0,z:0,e:0};let target=347,drag=null,ghost=null;
 const values={h:100,z:10,e:1},labels={h:'Hunderter',z:'Zehner',e:'Einer'};
 function newNumber(){
- clearTimeout(nextTimer);
  let n;do{n=Math.floor(Math.random()*999)+1}while(n===target);
  target=n;targetEl.textContent=String(n);message.textContent='';
  for(const k of Object.keys(counts)){counts[k]=0;render(k)}
