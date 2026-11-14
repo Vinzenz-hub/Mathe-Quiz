@@ -29,6 +29,10 @@ main{width:min(920px,100%);padding:clamp(22px,5vw,56px) clamp(16px,4vw,36px) 36p
 .source .h{width:35px;height:35px}.source .z{height:43px;width:15px}.source .e{width:19px;height:19px}
 .source span:last-child{font-size:14px;font-weight:800}
 .drag-ghost{position:fixed;z-index:20;pointer-events:none;opacity:.88;transform:translate(-50%,-50%) scale(1.12);filter:drop-shadow(0 5px 7px #0002)}
+.number-entry{display:none;justify-content:center;margin-top:clamp(24px,5vh,44px)}
+.number-entry.show{display:flex}
+.number-entry input{width:min(260px,70vw);height:62px;border:2px solid var(--line);border-radius:15px;background:#fff;text-align:center;font-size:30px;font-weight:800;color:var(--ink);outline:none}
+.number-entry input:focus{border-color:var(--blue)}
 .actions{display:flex;justify-content:center;gap:12px;margin-top:16px}
 .action{min-height:54px;padding:0 22px;border:0;border-radius:15px;font:750 16px system-ui;cursor:pointer}
 .check{background:var(--blue);color:white;box-shadow:0 5px 14px #315eea2b}
@@ -58,6 +62,7 @@ main.wrong{animation:shake .34s ease}
     <div class="source" data-source="z"><i class="piece z"></i><span>10</span></div>
     <div class="source" data-source="e"><i class="piece e"></i><span>1</span></div>
   </section>
+  <div class="number-entry" id="numberEntry"><input id="numberAnswer" type="number" min="1" max="999" inputmode="numeric" placeholder="Zahl" aria-label="Zahl eingeben"></div>
   <div class="result" id="result" aria-live="assertive"></div>
   <div class="actions"><button class="action check" id="check">Ergebnis überprüfen</button><button class="action next" id="next" disabled>Nächste Aufgabe</button></div>
   <div class="message" id="message" aria-live="polite"></div>
@@ -67,13 +72,29 @@ main.wrong{animation:shake .34s ease}
 const targetEl=document.getElementById('target'),message=document.getElementById('message');
 const main=document.querySelector('main'),result=document.getElementById('result');
 const checkButton=document.getElementById('check'),nextButton=document.getElementById('next');
-let solved=false,audioContext=null;
+let solved=false,audioContext=null,mode='build';
 const counts={h:0,z:0,e:0};let target=347,drag=null,ghost=null;
 const values={h:100,z:10,e:1},labels={h:'Hunderter',z:'Zehner',e:'Einer'};
 function newNumber(){
+ solved=false;mode=Math.random()<.34?'read':'build';
+ checkButton.disabled=false;nextButton.disabled=true;
+ result.className='result';result.textContent='';message.textContent='';
  let n;do{n=Math.floor(Math.random()*999)+1}while(n===target);
- target=n;targetEl.textContent=String(n);message.textContent='';
- for(const k of Object.keys(counts)){counts[k]=0;render(k)}
+ target=n;
+ for(const k of Object.keys(counts)){counts[k]=0}
+ if(mode==='read'){
+  const digits={h:Math.floor(n/100),z:Math.floor((n%100)/10),e:n%10};
+  for(const k of Object.keys(counts))counts[k]=digits[k];
+  targetEl.textContent='?';targetEl.setAttribute('aria-label','Gesuchte Zahl');
+  document.getElementById('tray').style.display='none';
+  document.getElementById('numberEntry').classList.add('show');
+ }else{
+  targetEl.textContent=String(n);targetEl.setAttribute('aria-label','Zielzahl');
+  document.getElementById('tray').style.display='flex';
+  document.getElementById('numberEntry').classList.remove('show');
+  document.getElementById('numberAnswer').value='';
+ }
+ for(const k of Object.keys(counts))render(k);
 }
 function render(k){
  const area=document.getElementById('pieces-'+k);area.replaceChildren();
@@ -98,14 +119,15 @@ function playTone(correct){
 }
 function verify(){
  if(solved)return;
- const correct=currentValue()===target;result.className='result show '+(correct?'good':'bad');result.textContent=correct?'✓':'✕';
+ const entered=document.getElementById('numberAnswer').value;\n if(mode==='read'&&(entered===''||Number(entered)<1||Number(entered)>999)){message.textContent='Bitte eine Zahl eingeben';return}\n const correct=(mode==='read'?Number(entered):currentValue())===target;result.className='result show '+(correct?'good':'bad');result.textContent=correct?'✓':'✕';
  if(correct){solved=true;message.textContent='Aufgabe gelöst';checkButton.disabled=true;nextButton.disabled=false;playTone(true);}
  else{message.textContent='Noch nicht richtig';if(navigator.vibrate)navigator.vibrate([120,60,120]);main.classList.remove('wrong');void main.offsetWidth;main.classList.add('wrong');playTone(false);}
 }
 checkButton.addEventListener('click',verify);
-nextButton.addEventListener('click',()=>{if(solved)newNumber()});
+nextButton.addEventListener('click',()=>{if(solved)newNumber()});\ndocument.getElementById('numberAnswer').addEventListener('input',()=>{if(!solved){result.className='result';result.textContent='';message.textContent=''}});
 function point(e){return {x:e.clientX,y:e.clientY}}
 function start(e,kind,from){
+ if(mode!=='build'||solved)return;
  if(e.button!==undefined&&e.button!==0)return;
  e.preventDefault();
  const p=point(e);drag={kind,from,startX:p.x,startY:p.y,moved:false};
