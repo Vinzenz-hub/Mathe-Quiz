@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#f7f8fa">
 <title>Zahlen legen</title>
 <style>
-:root{--bg:#f7f8fa;--ink:#17191f;--muted:#858b98;--line:#e5e7eb;--blue:#315eea;--yellow:#f4bd59;--green:#55b98b;--unit:#76a7f5}
+:root{--bg:#f7f8fa;--ink:#17191f;--muted:#858b98;--line:#e5e7eb;--blue:#315eea;--yellow:#f4bd59;--green:#55b98b;--unit:#76a7f5;--red:#e23b43}
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:ui-rounded,system-ui,-apple-system,"Segoe UI",sans-serif}
 body{min-height:100svh;display:flex;justify-content:center}
@@ -29,7 +29,17 @@ main{width:min(920px,100%);padding:clamp(22px,5vw,56px) clamp(16px,4vw,36px) 36p
 .source .h{width:35px;height:35px}.source .z{height:43px;width:15px}.source .e{width:19px;height:19px}
 .source span:last-child{font-size:14px;font-weight:800}
 .drag-ghost{position:fixed;z-index:20;pointer-events:none;opacity:.88;transform:translate(-50%,-50%) scale(1.12);filter:drop-shadow(0 5px 7px #0002)}
-.message{height:28px;margin-top:14px;text-align:center;font-size:14px;font-weight:700;color:#27845c}
+.actions{display:flex;justify-content:center;gap:12px;margin-top:16px}
+.action{min-height:54px;padding:0 22px;border:0;border-radius:15px;font:750 16px system-ui;cursor:pointer}
+.check{background:var(--blue);color:white;box-shadow:0 5px 14px #315eea2b}
+.next{background:#17191f;color:white}
+.action:disabled{opacity:.35;cursor:not-allowed;box-shadow:none}
+.result{height:0;display:flex;align-items:center;justify-content:center;overflow:hidden;font-size:clamp(100px,25vw,190px);font-weight:900;line-height:1;transition:height .15s}
+.result.show{height:clamp(115px,27vw,205px)}
+.result.good{color:#159b59}.result.bad{color:#e23b43}
+main.wrong{animation:shake .34s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-9px)}40%,80%{transform:translateX(9px)}}
+@media(max-width:520px){.actions{gap:8px}.action{flex:1;padding:0 10px;min-height:52px;font-size:14px}}
 @media(max-width:520px){main{padding-top:24px}.target{margin:7vh 0 7vh}.workspace{gap:7px}.zone{min-height:180px;padding:10px 5px;border-radius:15px}.zone-head{font-size:11px}.zone-head b{display:block;font-size:14px;margin:0 0 3px}.pieces{gap:4px;padding:12px 0}.h{width:27px;height:27px;background-size:7px 7px}.z{width:13px;height:39px}.e{width:15px;height:15px}.tray{gap:9px;padding:12px 8px;border-radius:16px}.source{min-width:0;flex:1;gap:7px;padding:9px 5px;min-height:60px}.source .h{width:29px;height:29px}.source .z{height:37px;width:13px}.source .e{width:16px;height:16px}.source span:last-child{font-size:12px}}
 @media(max-width:360px){.workspace{gap:5px}.zone{padding-inline:3px}.h{width:23px;height:23px}.z{width:11px;height:35px}.e{width:13px;height:13px}.tray{gap:6px}.source{gap:5px}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
@@ -48,12 +58,17 @@ main{width:min(920px,100%);padding:clamp(22px,5vw,56px) clamp(16px,4vw,36px) 36p
     <div class="source" data-source="z"><i class="piece z"></i><span>10</span></div>
     <div class="source" data-source="e"><i class="piece e"></i><span>1</span></div>
   </section>
+  <div class="result" id="result" aria-live="assertive"></div>
+  <div class="actions"><button class="action check" id="check">Ergebnis überprüfen</button><button class="action next" id="next" disabled>Nächste Aufgabe</button></div>
   <div class="message" id="message" aria-live="polite"></div>
 </main>
 <script>
 (()=>{
 const targetEl=document.getElementById('target'),message=document.getElementById('message');
-const counts={h:0,z:0,e:0};let target=347,drag=null,ghost=null,nextTimer=null;
+const main=document.querySelector('main'),result=document.getElementById('result');
+const checkButton=document.getElementById('check'),nextButton=document.getElementById('next');
+let solved=false,audioContext=null;
+const counts={h:0,z:0,e:0};let target=347,drag=null,ghost=null;
 const values={h:100,z:10,e:1},labels={h:'Hunderter',z:'Zehner',e:'Einer'};
 function newNumber(){
  clearTimeout(nextTimer);
@@ -70,13 +85,26 @@ function render(k){
  document.getElementById('count-'+k).textContent=String(counts[k]);
 }
 function currentValue(){return counts.h*100+counts.z*10+counts.e}
-function update(){
- const v=currentValue();
- if(v===target){
-  message.textContent='✓';nextTimer=setTimeout(newNumber,1100);
- }else if(v>target){message.textContent='';}
- else{message.textContent='';}
+function playTone(correct){
+ try{
+  const AudioCtx=window.AudioContext||window.webkitAudioContext;if(!AudioCtx)return;
+  audioContext=audioContext||new AudioCtx();if(audioContext.state==='suspended')audioContext.resume();
+  const now=audioContext.currentTime,notes=correct?[660,880]:[220,165];
+  notes.forEach((freq,i)=>{const osc=audioContext.createOscillator(),gain=audioContext.createGain();
+   osc.type=correct?'sine':'triangle';osc.frequency.setValueAtTime(freq,now+i*.13);
+   gain.gain.setValueAtTime(.0001,now+i*.13);gain.gain.exponentialRampToValueAtTime(.16,now+i*.13+.02);gain.gain.exponentialRampToValueAtTime(.0001,now+i*.13+.19);
+   osc.connect(gain);gain.connect(audioContext.destination);osc.start(now+i*.13);osc.stop(now+i*.13+.2);
+  });
+ }catch(e){}
 }
+function verify(){
+ if(solved)return;
+ const correct=currentValue()===target;result.className='result show '+(correct?'good':'bad');result.textContent=correct?'✓':'✕';
+ if(correct){solved=true;message.textContent='Aufgabe gelöst';checkButton.disabled=true;nextButton.disabled=false;playTone(true);}
+ else{message.textContent='Noch nicht richtig';if(navigator.vibrate)navigator.vibrate([120,60,120]);main.classList.remove('wrong');void main.offsetWidth;main.classList.add('wrong');playTone(false);}
+}
+checkButton.addEventListener('click',verify);
+nextButton.addEventListener('click',()=>{if(solved)newNumber()});
 function point(e){return {x:e.clientX,y:e.clientY}}
 function start(e,kind,from){
  if(e.button!==undefined&&e.button!==0)return;
@@ -105,13 +133,13 @@ function cleanup(){
 function end(e){
  if(!drag)return;const p=point(e),d=drag,under=document.elementFromPoint(p.x,p.y);
  const zone=under?.closest('[data-drop]');cleanup();
- if(!d.moved||!zone)return;
+ if(!d.moved||!zone||solved)return;
  if(d.from==='tray'){
   const k=zone.dataset.drop;
   if(k!==d.kind||counts[k]>=9)return;
-  counts[k]++;render(k);update();
+  counts[k]++;render(k);result.className='result';result.textContent='';message.textContent='';
  }else if(zone.dataset.drop==='tray'){
-  counts[d.kind]=Math.max(0,counts[d.kind]-1);render(d.kind);message.textContent='';clearTimeout(nextTimer);
+  counts[d.kind]=Math.max(0,counts[d.kind]-1);render(d.kind);result.className='result';result.textContent='';message.textContent='';
  }
 }
 function cancel(){cleanup()}
